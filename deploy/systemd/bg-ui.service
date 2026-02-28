@@ -1,0 +1,37 @@
+[Unit]
+Description=BG UI Web Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bg
+Group=bg
+WorkingDirectory=/opt/bg
+EnvironmentFile=/opt/bg/.env
+ExecStart=/opt/bg/.venv/bin/python -m src.ui.app
+Restart=on-failure
+RestartSec=3
+
+# Hardening básico
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+SystemCallArchitectures=native
+
+ReadWritePaths=/opt/bg/var
+RuntimeDirectory=bg-ui
+RuntimeDirectoryMode=0750
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target
